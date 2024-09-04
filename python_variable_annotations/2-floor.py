@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Annotated function floor """
+"""floor function"""
 import math
 
 
