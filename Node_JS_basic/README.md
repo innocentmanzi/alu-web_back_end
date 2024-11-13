@@ -1,62 +1,143 @@
-# Project Name
-**0x05. NodeJS Basics**
+# 0x05. NodeJS Basics
+<img src="https://positiwise.com/wp-content/uploads/2021/12/node-js-for-software-development.png" width='100%'/>
 
-## Author's Details
-Name: *Wendy Munyasi.*
+---
 
-Email: *wendymunyasi@gmail.com*
+Node.js is an open-source and cross-platform JavaScript runtime environment. It is a popular tool for almost any kind of project!
 
-Tel: *+254707240068.*
+## Learning Objectives
+At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
 
-##  Requirements
+- run javascript using NodeJS
+- use NodeJS modules
+- use specific Node JS module to read files
+- use process to access command line arguments and the environment
+- create a small HTTP server using Node JS
+- create a small HTTP server using Express JS
+- create advanced routes with Express JS
+- use ES6 with Node JS with Babel-node
+- use Nodemon to develop faster
 
-### JavaScript Scripts
-*   Allowed editors: `vi`, `vim`, `emacs`, `Visual Studio Code`.
-*   All your files will be interpreted on Ubuntu 20.04 LTS using `node` (version 18.x).
-*   All your files should end with a new line.
-*   The `main.js` files are used to test your functions, but you don’t have to push them to your repo.
-*   Your code will be tested using the [Jest Testing Framework](https://jestjs.io/). and the command `npm run test`.
-*   Your code will be analyzed using the linter [ESLint](https://eslint.org/) along with specific rules that will be provided.
-*   Your code needs to pass all the tests and lint. You can verify the entire project running `npm run full-test`.
-*   All of your functions/classes must be exported by using this format: `module.exports = myFunction;`
+## Resources
+### Read or watch:
 
-## Project Description
-Learn how to use NodeJS modules.
-How to use specific Node JS module to read files.
-How to use `process` to access command line arguments and the environment.
-How to create a small HTTP server using Node JS.
-How to create a small HTTP server using Express JS.
-How to create advanced routes with Express JS.
-How to use ES6 with Node JS with Babel-node.
-How to use Nodemon to develop faster.
+- [Node JS getting started](https://nodejs.org/en/docs/guides/getting-started-guide/)
+- [Process API doc](https://node.readthedocs.io/en/latest/api/process/)
+- [Child process](https://nodejs.org/api/child_process.html)
+- [Express getting started](https://expressjs.com/en/starter/installing.html)
+- [Mocha documentation](https://mochajs.org/)
+- [Nodemon documentation](https://github.com/remy/nodemon#nodemon)
 
-## More Info
-### Install Node 18
+## Provided files
+
+`database.csv`
 ```
-$ curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
+firstname,lastname,age,field
+Johann,Kerbrou,30,CS
+Guillaume,Salou,30,SWE
+Arielle,Salou,20,CS
+Jonathan,Benou,30,CS
+Emmanuel,Turlou,40,CS
+Guillaume,Plessous,35,CS
+Joseph,Crisou,34,SWE
+Paul,Schneider,60,SWE
+Tommy,Schoul,32,SWE
+Katie,Shirou,21,CS
 ```
 
-### Install Jest, Babel, and ESLint
-```
-$ npm install --save-dev jest
-$ npm install --save-dev babel-jest @babel/core @babel/preset-env
-$ npm install --save-dev eslint
+`package.json`
 ```
 
-**Find the configuration files `package.json`, `babel.config.js` and `.eslintrc.js` in the project directory. Run `npm install` when you have the `package.json`**
+{
+  "name": "node_js_basics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint",
+    "check-lint": "lint [0-9]*.js",
+    "test": "./node_modules/mocha/bin/mocha --require babel-register --exit",
+    "dev": "nodemon --exec babel-node --presets babel-preset-env ./server.js ./database.csv"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai-http": "^4.3.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^2.0.2",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.17.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "request": "^2.88.0",
+    "sinon": "^7.5.0"
+  }
+}
+```
+`babel.config.js`
+```
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: 'current',
+        },
+      },
+    ],
+  ],
+};
+```
+`.eslintrc.js`
+```
+module.exports = {
+  env: {
+    browser: false,
+    es6: true,
+    jest: true,
+  },
+  extends: [
+    'airbnb-base',
+    'plugin:jest/all',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  plugins: ['jest'],
+  rules: {
+    'max-classes-per-file': 'off',
+    'no-underscore-dangle': 'off',
+    'no-console': 'off',
+    'no-shadow': 'off',
+    'no-restricted-syntax': [
+      'error',
+      'LabeledStatement',
+      'WithStatement',
+    ],
+  },
+  overrides:[
+    {
+      files: ['*.js'],
+      excludedFiles: 'babel.config.js',
+    }
+  ]
+};
 
+```
 
-* **0. Executing basic javascript with Node JS** - Create a function named `displayMessage` that prints in `STDOUT` the string argument. - `0-console.js`.
-* **1. Using Process stdin** - Create a program `1-stdin.js` that will be executed through command line. - `1-stdin.js`.
-* **2. Reading a file synchronously with Node JS** - Using the database `database.csv` (provided in project description), create a function `countStudents` in the file `2-read_file.js`. - `2-read_file.js`.
-* **3. Reduce** - Using the database `database.csv` (provided in project description), create a function `countStudents`. - `3-read_file_async.js`.
-* **4. Create a small HTTP server using Node's HTTP module** - Create a small HTTP server using the `http` module. - `4-http.js`.
-* **5. Create a more complex HTTP server using Node's HTTP module** - Create a small HTTP server using the `http` module. - `5-http.js`.
-* **6. Create a small HTTP server using Express** - Install Express create a small HTTP server using Express module. - `6-http_express.js`.
-* **7. Create a more complex HTTP server using Express** - Recreate the small HTTP server using Express. - `7-http_express.js`.
-
-
-## Collaborate
-
-To collaborate, reach me through my email address wendymunyasi@gmail.com.
+## :pencil: **Author**
+### :man: Yidnekachew Bantrga
+- [Github](https://github.com/Yidne21)
+- [Linkedin](https://www.linkedin.com/in/yidnekachew-bantrga-801376234/)
