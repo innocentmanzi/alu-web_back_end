@@ -1,10 +1,10 @@
 /**
- * A function which dispaly a message to the STDOUT
- * @param {String} message the message to be display
- * @author Yidnekachew Bantrga <https://github.com/Yidne21>
+ * Prints in STDOUT the string argument.
+ * @param {String} msg The message to display.
+ *
  */
-const displayMessage = (message) => {
-  console.log(message);
+const displayMessage = (msg) => {
+  console.log(msg);
 };
 
 module.exports = displayMessage;

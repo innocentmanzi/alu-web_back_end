@@ -1,18 +1,13 @@
-/**
- * isplay the message Welcome to Holberton School, what is your name?
- * (followed by a new line)
- * @author Yidnekachew Bantrga <https://github.com/Yidne21>
- */
-process.stdout.write("Welcome to Holberton School, what is your name?\n");
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
 
-process.stdin.on("readable", () => {
-  const chunk = process.stdin.read();
+process.stdin.on('readable', () => {
+  const name = process.stdin.read();
 
-  if (chunk) {
-    process.stdout.write(`Your name is: ${chunk}`);
+  if (name.length > 0) {
+    process.stdout.write(`Your name is: ${name}`);
   }
 });
 
-process.stdin.on("end", () => {
-  process.stdout.write("This important software is now closing\n");
+process.stdin.on('exit', () => {
+  process.stdout.write('This important software is now closing\n');
 });
