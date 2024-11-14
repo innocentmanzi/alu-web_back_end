@@ -1,9 +1,15 @@
-module.exports = function calculateNumber(a, b = 0) {
-  const aNum = Number(a);
-  const bNum = Number(b);
-  
-  if (Number.isNaN(aNum) || Number.isNaN(bNum))
-    throw TypeError('Parameters must be numbers');
-  
-    return Math.round(aNum) + Math.round(bNum);
-  };
+/**
+ * A function which round a and b and return the sum of it
+ * @param {number} a the first argument
+ * @param {number} b the second argument
+ * @author Yidnekachew Bantrga <https://github.com/Yidne21>
+ */
+function calculateNumber(a, b) {
+  if ((typeof a === "number") & (typeof b === "number")) {
+    return Math.round(a) + Math.round(b);
+  } else {
+    return NaN;
+  }
+}
+
+module.exports = calculateNumber;

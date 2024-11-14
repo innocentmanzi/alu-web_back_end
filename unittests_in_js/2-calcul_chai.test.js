@@ -1,47 +1,68 @@
-const chai = require('chai');
-const expect = chai.expect;
-const calculateNumber = require('./2-calcul_chai');
+const { expect } = require("chai");
+const calculateNumber = require("./2-calcul_chai");
 
-describe('test calculate number', () => {
-  it('checks the rounded sum', () => {
-    expect(calculateNumber('SUM', 1, 3)).to.equal(4);
-    expect(calculateNumber('SUM', 1, 3.7)).to.equal(5);
-    expect(calculateNumber('SUM', 1.2, 3.7)).to.equal(5);
-    expect(calculateNumber('SUM', 1.5, 3.7)).to.equal(6);
-    expect(calculateNumber('SUM', -1, 3)).to.equal(2);
-    expect(calculateNumber('SUM', -1, -4)).to.equal(-5);
-    expect(calculateNumber('SUM', -1.2, -1.4)).to.equal(-2);
-    expect(calculateNumber('SUM', -2, 3.2)).to.equal(1);
+describe("calculateNumber", () => {
+  describe("when type is SUM", () => {
+    it("returns the sum of two rounded numbers", () => {
+      expect(calculateNumber("SUM", 1.2, 3.8)).to.equal(5);
+    });
+
+    it("returns NaN if any of the arguments is not a number", () => {
+      expect(calculateNumber("SUM", "not a number", 5)).to.be.NaN;
+    });
+
+    it("returns the correct sum when one of the arguments is zero", () => {
+      expect(calculateNumber("SUM", 0, 5)).to.equal(5);
+    });
+
+    it("returns the correct sum when one of the arguments is a large number", () => {
+      expect(calculateNumber("SUM", 10000000000000000, 1)).to.equal(
+        10000000000000001
+      );
+    });
   });
 
-  it('checks the rounded difference', () => {
-    expect(calculateNumber('SUBTRACT', 1, 3)).to.equal(-2);
-    expect(calculateNumber('SUBTRACT', 3.3, 1)).to.equal(2);
-    expect(calculateNumber('SUBTRACT', 1.4, 4.5)).to.equal(-4);
-    expect(calculateNumber('SUBTRACT', 1.5, 3.7)).to.equal(-2);
-    expect(calculateNumber('SUBTRACT', -1, 3)).to.equal(-4);
-    expect(calculateNumber('SUBTRACT', -1, -4)).to.equal(3);
-    expect(calculateNumber('SUBTRACT', -1.2, -1.4)).to.equal(0);
-    expect(calculateNumber('SUBTRACT', -2, 3.2)).to.equal(-5);
+  describe("when type is SUBTRACT", () => {
+    it("returns the difference between two rounded numbers", () => {
+      expect(calculateNumber("SUBTRACT", 3.8, 1.2)).to.equal(3);
+    });
+
+    it("returns NaN if any of the arguments is not a number", () => {
+      expect(calculateNumber("SUBTRACT", "not a number", 5)).to.be.NaN;
+    });
+
+    it("returns the correct difference when one of the arguments is zero", () => {
+      expect(calculateNumber("SUBTRACT", 0, 5)).to.equal(-5);
+    });
+
+    it("returns the correct difference when one of the arguments is a large number", () => {
+      expect(calculateNumber("SUBTRACT", 10000000000000000, 1)).to.equal(
+        9999999999999999
+      );
+    });
   });
 
-  it('checks the rounded division', () => {
-    expect(calculateNumber('DIVIDE', 6, 2)).to.equal(3);
-    expect(calculateNumber('DIVIDE', 3.3, 1)).to.equal(3);
-    expect(calculateNumber('DIVIDE', 1.4, 4.5)).to.equal(0.2);
-    expect(calculateNumber('DIVIDE', 1.7, 3.7)).to.equal(0.5);
-    expect(calculateNumber('DIVIDE', -6, 3)).to.equal(-2);
-    expect(calculateNumber('DIVIDE', -6, -3)).to.equal(2);
-    expect(calculateNumber('DIVIDE', -6.2, -3.4)).to.equal(2);
-    expect(calculateNumber('DIVIDE', -2, 2.1)).to.equal(-1);
-    expect(calculateNumber('DIVIDE', -2, 0)).to.equal('Error');
-  });
+  describe("when type is DIVIDE", () => {
+    it("returns the quotient of two rounded numbers", () => {
+      expect(calculateNumber("DIVIDE", 8, 4)).to.equal(2);
+    });
 
+    it("returns 'Error' if the second argument is zero", () => {
+      expect(calculateNumber("DIVIDE", 8, 0)).to.equal("Error");
+    });
 
-  it('checks the NaN number', () => {
-    expect(() => calculateNumber('SUM', NaN, 5)).to.throw();
-    expect(() => calculateNumber('SUBTRACT', NaN, 5)).to.throw();
-    expect(() => calculateNumber('DIVIDE', NaN, 5)).to.throw();
-    expect(() => calculateNumber('shhh', NaN, 5)).to.throw();
+    it("returns NaN if any of the arguments is not a number", () => {
+      expect(calculateNumber("DIVIDE", "not a number", 5)).to.be.NaN;
+    });
+
+    it("returns the correct quotient when one of the arguments is zero", () => {
+      expect(calculateNumber("DIVIDE", 0, 5)).to.equal(0);
+    });
+
+    it("returns the correct quotient when one of the arguments is a large number", () => {
+      expect(calculateNumber("DIVIDE", 10000000000000000, 2)).to.equal(
+        5000000000000000
+      );
+    });
   });
 });

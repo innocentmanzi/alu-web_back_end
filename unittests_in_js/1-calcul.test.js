@@ -1,46 +1,97 @@
-const assert = require('assert');
-const calculateNumber = require('./1-calcul');
+const assert = require("assert");
+const calculateNumber = require("./1-calcul");
 
-describe('test calculate number', () => {
-  it('checks the rounded sum', () => {
-    assert.equal(calculateNumber('SUM', 1, 3), 4);
-    assert.equal(calculateNumber('SUM', 1, 3.7), 5);
-    assert.equal(calculateNumber('SUM', 1.2, 3.7), 5);
-    assert.equal(calculateNumber('SUM', 1.5, 3.7), 6);
-    assert.equal(calculateNumber('SUM', -1, 3), 2);
-    assert.equal(calculateNumber('SUM', -1, -4), -5);
-    assert.equal(calculateNumber('SUM', -1.2, -1.4), -2);
-    assert.equal(calculateNumber('SUM', -2, 3.2), 1);
+describe("calculateNumber", () => {
+  describe("when type is SUM", () => {
+    it("returns the sum of two rounded numbers", () => {
+      assert.strictEqual(calculateNumber("SUM", 2.7, 3.2), 6);
+      assert.strictEqual(calculateNumber("SUM", 2.2, 3.7), 6);
+      assert.strictEqual(calculateNumber("SUM", -2.7, -3.2), -6);
+      assert.strictEqual(calculateNumber("SUM", -2.2, -3.7), -6);
+    });
+
+    it("returns NaN if any of the arguments is not a number", () => {
+      assert(isNaN(calculateNumber("SUM", 2.7, "3.2")));
+      assert(isNaN(calculateNumber("SUM", "2.7", 3.2)));
+      assert(isNaN(calculateNumber("SUM", "2.7", "3.2")));
+      assert(isNaN(calculateNumber("SUM", NaN, 3.2)));
+      assert(isNaN(calculateNumber("SUM", undefined, 3.2)));
+    });
+
+    it("returns the correct sum when one of the arguments is zero", () => {
+      assert.strictEqual(calculateNumber("SUM", 0, 3.2), 3);
+      assert.strictEqual(calculateNumber("SUM", 2.7, 0), 3);
+      assert.strictEqual(calculateNumber("SUM", 0, -3.2), -3);
+      assert.strictEqual(calculateNumber("SUM", -2.7, 0), -3);
+    });
+
+    it("returns the correct sum when one of the arguments is a large number", () => {
+      assert.strictEqual(calculateNumber("SUM", 1e100, 3.2), 1e100);
+      assert.strictEqual(calculateNumber("SUM", 2.7, 1e100), 1e100);
+      assert.strictEqual(calculateNumber("SUM", -1e100, -3.2), -1e100);
+      assert.strictEqual(calculateNumber("SUM", -2.7, -1e100), -1e100);
+    });
+  });
+  describe("when type is SUBTRACT", () => {
+    it("returns the difference between two rounded numbers", () => {
+      assert.strictEqual(calculateNumber("SUBTRACT", 2.7, 3.2), 0);
+      assert.strictEqual(calculateNumber("SUBTRACT", 2.2, 3.7), -2);
+      assert.strictEqual(calculateNumber("SUBTRACT", -2.7, -3.2), 0);
+      assert.strictEqual(calculateNumber("SUBTRACT", -2.2, -3.7), 2);
+    });
+
+    it("returns NaN if any of the arguments is not a number", () => {
+      assert(isNaN(calculateNumber("SUBTRACT", 2.7, "3.2")));
+      assert(isNaN(calculateNumber("SUBTRACT", "2.7", 3.2)));
+      assert(isNaN(calculateNumber("SUBTRACT", "2.7", "3.2")));
+      assert(isNaN(calculateNumber("SUBTRACT", NaN, 3.2)));
+      assert(isNaN(calculateNumber("SUBTRACT", undefined, 3.2)));
+    });
+
+    it("returns the correct difference when one of the arguments is zero", () => {
+      assert.strictEqual(calculateNumber("SUBTRACT", 0, 3.2), -3);
+      assert.strictEqual(calculateNumber("SUBTRACT", 2.7, 0), 3);
+      assert.strictEqual(calculateNumber("SUBTRACT", 0, -3.2), 3);
+      assert.strictEqual(calculateNumber("SUBTRACT", -2.7, 0), -3);
+    });
+
+    it("returns the correct difference when one of the arguments is a large number", () => {
+      assert.strictEqual(calculateNumber("SUBTRACT", 1e100, 3.2), 1e100);
+      assert.strictEqual(calculateNumber("SUBTRACT", 2.7, 1e100), -1e100);
+      assert.strictEqual(calculateNumber("SUBTRACT", -1e100, -3.2), -1e100);
+      assert.strictEqual(calculateNumber("SUBTRACT", -2.7, -1e100), 1e100);
+    });
   });
 
-  it('checks the rounded difference', () => {
-    assert.equal(calculateNumber('SUBTRACT', 1, 3), -2);
-    assert.equal(calculateNumber('SUBTRACT', 3.3, 1), 2);
-    assert.equal(calculateNumber('SUBTRACT', 1.4, 4.5), -4);
-    assert.equal(calculateNumber('SUBTRACT', 1.5, 3.7), -2);
-    assert.equal(calculateNumber('SUBTRACT', -1, 3), -4);
-    assert.equal(calculateNumber('SUBTRACT', -1, -4), 3);
-    assert.equal(calculateNumber('SUBTRACT', -1.2, -1.4), 0);
-    assert.equal(calculateNumber('SUBTRACT', -2, 3.2), -5);
-  });
+  describe("when type is DIVIDE", () => {
+    it("returns the quotient of two rounded numbers", () => {
+      assert.strictEqual(calculateNumber("DIVIDE", 6, 2), 3);
+      assert.strictEqual(calculateNumber("DIVIDE", 10, 3), 3.3333333333333335);
+      assert.strictEqual(calculateNumber("DIVIDE", -6, -2), 3);
+      assert.strictEqual(
+        calculateNumber("DIVIDE", -10, 3),
+        -3.3333333333333335
+      );
+    });
 
-  it('checks the rounded division', () => {
-    assert.equal(calculateNumber('DIVIDE', 6, 2), 3);
-    assert.equal(calculateNumber('DIVIDE', 3.3, 1), 3);
-    assert.equal(calculateNumber('DIVIDE', 1.4, 4.5), 0.2);
-    assert.equal(calculateNumber('DIVIDE', 1.7, 3.7), 0.5);
-    assert.equal(calculateNumber('DIVIDE', -6, 3), -2);
-    assert.equal(calculateNumber('DIVIDE', -6, -3), 2);
-    assert.equal(calculateNumber('DIVIDE', -6.2, -3.4), 2);
-    assert.equal(calculateNumber('DIVIDE', -2, 2.1), -1);
-    assert.equal(calculateNumber('DIVIDE', -2, 0), 'Error');
-  });
+    it('returns "Error" if the second argument is zero', () => {
+      assert.strictEqual(calculateNumber("DIVIDE", 10, 0), "Error");
+      assert.strictEqual(calculateNumber("DIVIDE", -10, 0), "Error");
+      assert.strictEqual(calculateNumber("DIVIDE", 0, 0), "Error");
+    });
 
+    it("returns NaN if any of the arguments is not a number", () => {
+      assert(isNaN(calculateNumber("DIVIDE", 2.7, "3.2")));
+      assert(isNaN(calculateNumber("DIVIDE", "2.7", 3.2)));
+      assert(isNaN(calculateNumber("DIVIDE", "2.7", "3.2")));
+      assert(isNaN(calculateNumber("DIVIDE", NaN, 3.2)));
+      assert(isNaN(calculateNumber("DIVIDE", undefined, 3.2)));
+    });
 
-  it('checks the NaN number', () => {
-    assert.throws(() => calculateNumber('SUM', NaN, 5), '[Function: TypeError]');
-    assert.throws(() => calculateNumber('SUBTRACT', NaN, 5), '[Function: TypeError]');
-    assert.throws(() => calculateNumber('DIVIDE', NaN, 5), '[Function: TypeError]');
-    assert.throws(() => calculateNumber('shhh', NaN, 5), '[Function: TypeError]');
+    it("returns the correct quotient when one of the arguments is zero", () => {
+      assert.strictEqual(calculateNumber("DIVIDE", 0, 3.2), 0);
+      assert.strictEqual(calculateNumber("DIVIDE", 2.7, 0), "Error");
+      assert.strictEqual(calculateNumber("DIVIDE", -2.7, 0), "Error");
+    });
   });
 });

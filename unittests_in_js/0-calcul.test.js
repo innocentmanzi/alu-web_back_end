@@ -1,42 +1,37 @@
-const assert = require('assert');
-const mocha = require('mocha');
+/**
+ * A Test module for calculateNumber function
+ * @author Yidnekachew Bantrga <https://github.com/Yidne21>
+ */
+const assert = require("assert");
+const calculateNumber = require("./0-calcul");
 
-const calculateNumber = require('./0-calcul');
-
-describe('calculateNumber', () => {
-  it('should return sum of integers', () => {
-    assert.strictEqual(calculateNumber(1, 3), 4);
-    assert.strictEqual(calculateNumber(1, -1), 0);
-    assert.strictEqual(calculateNumber(1, -3), -2);
+describe("calculateNumber", () => {
+  it("returns the sum of two rounded numbers", () => {
+    assert.strictEqual(calculateNumber(2.7, 3.2), 6);
+    assert.strictEqual(calculateNumber(2.2, 3.7), 6);
+    assert.strictEqual(calculateNumber(-2.7, -3.2), -6);
+    assert.strictEqual(calculateNumber(-2.2, -3.7), -6);
   });
 
-  it('should round floats', () => {
-    assert.strictEqual(calculateNumber(1, 3.7), 5);
-    assert.strictEqual(calculateNumber(1.2, 3.7), 5);
-    assert.strictEqual(calculateNumber(1.5, 3.7), 6);
-    assert.strictEqual(calculateNumber(0.1, 0), 0);
-    assert.strictEqual(calculateNumber(1.4, -4.5), -3);
+  it("returns NaN if any of the arguments is not a number", () => {
+    assert(isNaN(calculateNumber(2.7, "3.2")));
+    assert(isNaN(calculateNumber("2.7", 3.2)));
+    assert(isNaN(calculateNumber("2.7", "3.2")));
+    assert(isNaN(calculateNumber(NaN, 3.2)));
+    assert(isNaN(calculateNumber(undefined, 3.2)));
   });
 
-  it('should return the rounded number if only one is provided', () => {
-    assert.strictEqual(calculateNumber(2), 2);
-    assert.strictEqual(calculateNumber(2.7), 3);
+  it("returns the correct sum when one of the arguments is zero", () => {
+    assert.strictEqual(calculateNumber(0, 3.2), 3);
+    assert.strictEqual(calculateNumber(2.7, 0), 3);
+    assert.strictEqual(calculateNumber(0, -3.2), -3);
+    assert.strictEqual(calculateNumber(-2.7, 0), -3);
   });
 
-  it('should cast non-numbers into numbers', () => {
-    assert.strictEqual(calculateNumber(true, '3'), 4);
-    assert.strictEqual(calculateNumber(1, '3.7'), 5);
-    assert.strictEqual(calculateNumber('1.2', 3.7), 5);
-  });
-
-  it('should throw typeerror if either param cannot be coerced to a number', () => {
-    assert.throws(() => calculateNumber('hello'), {
-      name: 'TypeError',
-      message: 'Parameters must be numbers'
-    });
-    assert.throws(() => calculateNumber(1.2, 'dog'), {
-      name: 'TypeError',
-      message: 'Parameters must be numbers'
-    });
+  it("returns the correct sum when one of the arguments is a large number", () => {
+    assert.strictEqual(calculateNumber(1e100, 3.2), 1e100);
+    assert.strictEqual(calculateNumber(2.7, 1e100), 1e100);
+    assert.strictEqual(calculateNumber(-1e100, -3.2), -1e100);
+    assert.strictEqual(calculateNumber(-2.7, -1e100), -1e100);
   });
 });
